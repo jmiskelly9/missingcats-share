@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missing Cats Canada</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 60px 20px;
+      background: #ffffff;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Missing Cats Canada</h1>
+
+  <p id="message">Preparing your pet's link...</p>
+
+  <button id="copyButton" style="display:none;">
+    📋 Copy Link
+  </button>
+
+  <p>
+    <a id="openLink" href="#">Open Pet Details</a>
+  </p>
+
+  <script>
+
+    // Get the Submission ID from the URL
+    const submissionId =
+      window.location.pathname
+        .split("/")
+        .filter(Boolean)
+        .pop();
+
+    // The short URL people share
+    const shareUrl =
+      "https://share.missingcats.ca/" + submissionId;
+
+    // The corresponding Looker Studio Pet Details URL
+    const lookerUrl =
+      "https://datastudio.google.com/reporting/493185c2-5e8d-4ce9-8253-3963f3685202/page/p_dbw0nti36d" +
+      "?params=" +
+      encodeURIComponent(
+        JSON.stringify({
+          "ds8.selected_submission_id": submissionId
+        })
+      );
+
+    const message =
+      document.getElementById("message");
+
+    const copyButton =
+      document.getElementById("copyButton");
+
+    const openLink =
+      document.getElementById("openLink");
+
+    openLink.href = lookerUrl;
+
+    async function copyLink() {
+
+      try {
+
+        await navigator.clipboard.writeText(shareUrl);
+
+        message.textContent =
+          "✅ Share link copied!";
+
+        copyButton.textContent =
+          "✅ Copied";
+
+      } catch (error) {
+
+        message.textContent =
+          "Click the button below to copy the link.";
+
+        copyButton.style.display =
+          "inline-block";
+      }
+    }
+
+    copyButton.addEventListener(
+      "click",
+      copyLink
+    );
+
+    // Try automatic copy
+    copyLink();
+
+  </script>
+
+</body>
+</html>
